@@ -5,8 +5,8 @@ namespace Barbershop.Repository;
 
 public interface IAppointmentsRepository{
     public Task<Appointment> GetAppointment(int appointmentId);
-    public Task<ICollection<Appointment>> GetClientsAppointments(int userId);
-    public Task<ICollection<Appointment>> GetBarberAppointments(int barberId);
+    public Task<ICollection<Appointment>> GetClientsAppointments(int userId, int page = 0, int countPerPage = 10);
+    public Task<ICollection<Appointment>> GetBarberAppointments(int barberId, int page = 0, int countPerPage = 10);
     public Task<bool> UpdateAppointment(int appointmentId, Appointment appointment);
     public Task<bool> CreateAppointment(Appointment appointment);
     public Task<bool> DeleteAppoint(int appointmentId);
@@ -42,12 +42,12 @@ public class AppointmentsRepository: IAppointmentsRepository{
         throw new NotImplementedException();
     }
 
-    public Task<ICollection<Appointment>> GetBarberAppointments(int barberId)
+    public Task<ICollection<Appointment>> GetBarberAppointments(int barberId, int page, int countPerPage)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ICollection<Appointment>> GetClientsAppointments(int userId)
+    public Task<ICollection<Appointment>> GetClientsAppointments(int userId, int page, int countPerPage)
     {
         throw new NotImplementedException();
     }
