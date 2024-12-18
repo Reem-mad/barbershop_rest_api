@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BarberShopApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241120191356_InitialMig")]
+    [Migration("20241218195522_InitialMig")]
     partial class InitialMig
     {
         /// <inheritdoc />

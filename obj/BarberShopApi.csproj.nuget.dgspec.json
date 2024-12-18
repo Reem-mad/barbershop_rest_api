@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\projects\\barbershop_rest_api\\BarberShopApi.csproj": {}
+    "/home/kwaku/Desktop/reem/BarberShopApi/BarberShopApi.csproj": {}
   },
   "projects": {
-    "D:\\projects\\barbershop_rest_api\\BarberShopApi.csproj": {
+    "/home/kwaku/Desktop/reem/BarberShopApi/BarberShopApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\projects\\barbershop_rest_api\\BarberShopApi.csproj",
+        "projectUniqueName": "/home/kwaku/Desktop/reem/BarberShopApi/BarberShopApi.csproj",
         "projectName": "BarberShopApi",
-        "projectPath": "D:\\projects\\barbershop_rest_api\\BarberShopApi.csproj",
-        "packagesPath": "C:\\Users\\kwaku\\.nuget\\packages\\",
-        "outputPath": "D:\\projects\\barbershop_rest_api\\obj\\",
+        "projectPath": "/home/kwaku/Desktop/reem/BarberShopApi/BarberShopApi.csproj",
+        "packagesPath": "/home/kwaku/.nuget/packages/",
+        "outputPath": "/home/kwaku/Desktop/reem/BarberShopApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kwaku\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/kwaku/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -88,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.111/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
