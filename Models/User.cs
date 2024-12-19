@@ -12,4 +12,5 @@ public class User{
     public required string Name {get; set; }
     public required string Email {get; set; }
     public Location? Location {get;  set; }
+    public bool IsVisible {get; set;} = false;
 }
