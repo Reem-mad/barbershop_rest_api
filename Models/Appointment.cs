@@ -14,4 +14,5 @@ public class Appointment{
     public DateTime EndsOn {get; set; }
     public AppointmentStatus Status {get; set;} = AppointmentStatus.Booked;
     public required Service Service {get; set; }
+    public bool IsVisible {get; set; } = true;
 }

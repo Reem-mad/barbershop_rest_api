@@ -8,6 +8,7 @@ public interface IServiceRepository{
     public Task<ICollection<Service>> GetBarberServices(int barberId, int page = 0, int countPerPage = 10);
     public Task<bool> UpdateService(int serviceId, int barberId, Service service);
     public Task<bool> DeleteService(int serviceId, int barberId);
+    public Task<Service?> GetService(int serviceId);
 }
 
 public class ServiceRepository : IServiceRepository
@@ -35,6 +36,10 @@ public class ServiceRepository : IServiceRepository
 
     public Task<bool> UpdateService(int serviceId, int barberId, Service service)
     {
+        throw new NotImplementedException();
+    }
+
+    public Task<Service?> GetService(int serviceId){
         throw new NotImplementedException();
     }
 }

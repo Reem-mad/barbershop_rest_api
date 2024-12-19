@@ -5,7 +5,7 @@ namespace Barbershop.Repository;
 
 public interface IBarberRepository{
     public Task<bool> CreateBarber(Barber barber);
-    public Task<Barber> GetBarber(int barberId);
+    public Task<Barber?> GetBarber(int barberId);
     public Task<ICollection<Barber>> GetBarbers(int page = 0, int countPerPage = 10);
     public Task<bool> UpdateBarber(int barberId, Barber barber);
     public Task<bool> DeleteBarber(int barberId);
@@ -43,7 +43,7 @@ public class BarberRepository : IBarberRepository
         throw new NotImplementedException();
     }
 
-    public Task<Barber> GetBarber(int barberId)
+    public Task<Barber?> GetBarber(int barberId)
     {
         throw new NotImplementedException();
     }

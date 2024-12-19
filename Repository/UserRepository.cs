@@ -8,7 +8,7 @@ public interface IUserRepository{
     public Task<bool> DeleteUser(int userId);
     public Task<bool> UpdateUser(int userId, User user);
     public Task<ICollection<Appointment>> GetAppointments(int page = 0, int counterPerPage = 10);
-    public Task<User> GetUser(int userId);
+    public Task<User?> GetUser(int userId);
     public Task<ICollection<User>> GetUsers(int page = 0, int counterPerPage = 10);
 }
 
@@ -35,7 +35,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> GetUser(int userId)
+    public Task<User?> GetUser(int userId)
     {
         throw new NotImplementedException();
     }
