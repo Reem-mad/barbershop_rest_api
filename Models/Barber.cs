@@ -7,4 +7,5 @@ public class Barber{
     public required User User {get; set;}
     public required ICollection<Service> ServicesProvided {get; set;} 
     public  List<BarberAvailability> Availabilities {get; } = new List<BarberAvailability>();
+    public bool IsVisible {get; set;} = true;
 }
