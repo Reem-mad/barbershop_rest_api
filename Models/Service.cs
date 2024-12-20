@@ -12,4 +12,6 @@ public class Service{
     public int Duration { get; set; }
     public double Price {get; set; }
     public ServiceTarget ServiceTarget {get; set; } = ServiceTarget.Male;
+    public int BarberId {get; set; }
+    public bool IsVisible {get; set;} = true;
 }

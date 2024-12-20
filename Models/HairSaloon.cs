@@ -6,4 +6,5 @@ public class HairSaloon{
     public required Location SaloonLocation {get; set; }
     public required Contact Contact {get; set; }
     public List<Barber> Barbers {get;} = new List<Barber>();
+    public bool IsVisible {get; set;} = true;
 }

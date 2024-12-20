@@ -1,10 +1,12 @@
+using Barbershop.Contracts;
 using Barbershop.Data;
 using Barbershop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barbershop.Repository;
 
 public interface IServiceRepository{
-    public Task<bool> CreateService(Service service, int barberId);
+    public Task<Service?> CreateService(CreateServiceDto service, int barberId);
     public Task<ICollection<Service>> GetBarberServices(int barberId, int page = 0, int countPerPage = 10);
     public Task<bool> UpdateService(int serviceId, int barberId, Service service);
     public Task<bool> DeleteService(int serviceId, int barberId);
@@ -19,19 +21,35 @@ public class ServiceRepository : IServiceRepository
         _context = context;
     }
 
-    public Task<bool> CreateService(Service service, int barberId)
+    public async Task<Service?> CreateService(CreateServiceDto service, int barberId)
     {
-        throw new NotImplementedException();
+        Service dbService = new Service
+        {
+            Name = service.Name,
+            Duration = service.Duration,
+            Price = service.Price,
+            ServiceTarget = service.ServiceTarget
+        };
+        var barber = await _context.Barbers.FindAsync(barberId);
+        if (barber == null) return null;
+        barber.ServicesProvided.Add(dbService);
+        await _context.SaveChangesAsync();
+        return dbService;
     }
 
-    public Task<bool> DeleteService(int serviceId, int barberId)
+    public async Task<bool> DeleteService(int serviceId, int barberId)
     {
-        throw new NotImplementedException();
+        var dbService = await _context.Services.FirstOrDefaultAsync(s => s.Id == serviceId && s.BarberId == barberId);
+        if (dbService == null) return false;
+        dbService.IsVisible = false;
+        await _context.SaveChangesAsync();
+        return true;
     }
 
-    public Task<ICollection<Service>> GetBarberServices(int barberId, int page = 0, int countPerPage = 10)
+    public async Task<ICollection<Service>> GetBarberServices(int barberId, int page = 0, int countPerPage = 10)
     {
-        throw new NotImplementedException();
+        var services = await _context.Services.Where(s => s.BarberId == barberId).Skip(page * countPerPage).Take(countPerPage).ToListAsync();
+        return services;
     }
 
     public Task<bool> UpdateService(int serviceId, int barberId, Service service)
@@ -39,7 +57,7 @@ public class ServiceRepository : IServiceRepository
         throw new NotImplementedException();
     }
 
-    public Task<Service?> GetService(int serviceId){
-        throw new NotImplementedException();
+    public async Task<Service?> GetService(int serviceId){
+        return await _context.Services.FindAsync(serviceId);
     }
 }

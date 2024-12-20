@@ -1,14 +1,15 @@
+using Barbershop.Contracts;
 using Barbershop.Data;
 using Barbershop.Models;
 
 namespace Barbershop.Repository;
 
 public interface IHairSaloonRepository{
-    public Task<bool> CreateSaloon(HairSaloon saloon);
+    public Task<bool> CreateSaloon(CreateSaloonDto saloon);
     public Task<bool> UpdateSaloon(int saloonId, HairSaloon saloon);
     public Task<bool> DeleteSaloon(int saloonId, int barberId);
-    public Task<bool> AddBarberToSaloon(int saloonId, Barber barber);
-    public Task<bool> RemoveBarberFromSaloon(int saloonId, Barber barber);
+    public Task<bool> AddBarberToSaloon(int saloonId, int barberId);
+    public Task<bool> RemoveBarberFromSaloon(int saloonId, int barberId);
 }
 
 
@@ -20,26 +21,65 @@ public class HairSaloonRepository : IHairSaloonRepository
         _context = context;
     }
     
-    public Task<bool> AddBarberToSaloon(int saloonId, Barber barber)
+    public async Task<bool> AddBarberToSaloon(int saloonId, int barberId)
     {
-        throw new NotImplementedException();
+        var dbBarber = await _context.Barbers.FindAsync(barberId);
+        if (dbBarber == null) return false;
+        var dbSaloon = await _context.HairSaloons.FindAsync(saloonId);
+        if (dbSaloon == null) return false;
+        dbSaloon.Barbers.Add(dbBarber);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+   
+
+    public async Task<bool> CreateSaloon(CreateSaloonDto saloon)
+    {
+        HairSaloon dbSaloon = new HairSaloon
+        {
+            ShopName = saloon.ShopName,
+            Contact = new Contact
+            {
+                Email = saloon.Contact.Email,
+                
+            },
+            SaloonLocation = new Location
+            {
+                City = saloon.SaloonLocation.City,
+                Province = saloon.SaloonLocation.Province,
+                Street = saloon.SaloonLocation.Street,
+                Address = saloon.SaloonLocation.Address
+            }
+        };
+        await _context.HairSaloons.AddAsync(dbSaloon);
+        await _context.SaveChangesAsync();
+        return true;
     }
 
-    public Task<bool> CreateSaloon(HairSaloon saloon)
+    public async Task<bool> DeleteSaloon(int saloonId, int barberId)
     {
-        throw new NotImplementedException();
+        var dbSaloon = await _context.HairSaloons.FindAsync(saloonId);
+        if (dbSaloon == null) return false;
+        if (dbSaloon.Barbers.Any(b => b.Id == barberId))
+        {
+            dbSaloon.IsVisible = false;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
     }
 
-    public Task<bool> DeleteSaloon(int saloonId, int barberId)
+    public async Task<bool> RemoveBarberFromSaloon(int saloonId, int barberId)
     {
-        throw new NotImplementedException();
+        var dbBarber = await _context.Barbers.FindAsync(barberId);
+        if (dbBarber == null) return false;
+        var dbSaloon = await _context.HairSaloons.FindAsync(saloonId);
+        if (dbSaloon == null) return false;
+        dbSaloon.Barbers.Remove(dbBarber);
+        await _context.SaveChangesAsync();
+        return true;
     }
-
-    public Task<bool> RemoveBarberFromSaloon(int saloonId, Barber barber)
-    {
-        throw new NotImplementedException();
-    }
-
+   
     public Task<bool> UpdateSaloon(int saloonId, HairSaloon saloon)
     {
         throw new NotImplementedException();

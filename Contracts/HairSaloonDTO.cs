@@ -8,3 +8,11 @@ public class HairSaloonDto
     public required CreateLocationDto SaloonLocation { get; set; } 
     public required CreateContactDto Contact { get; set; } 
 }
+
+
+public class CreateSaloonDto
+{
+    public required string ShopName { get; set; } 
+    public required CreateLocationDto SaloonLocation { get; set; } 
+    public required CreateContactDto Contact { get; set; } 
+}
