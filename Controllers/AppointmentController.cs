@@ -21,4 +21,10 @@ public class AppointmentsController: ControllerBase{
         return Ok(appointment);
     }
 
+    [HttpGet("client/{userId}")]
+    public async Task<IActionResult> GetClientsAppointments(int userId, [FromQuery] int page = 0, [FromQuery] int countPerPage = 10){
+        var appointments = await _appointmentRepository.GetClientsAppointments(userId, page, countPerPage);
+        return Ok(appointments);
+    }
+
 }
