@@ -16,34 +16,42 @@ public interface IAppointmentsRepository{
 
 public class AppointmentsRepository: IAppointmentsRepository{
     private readonly AppDbContext _context;
-    private readonly BarberAvailabilityRespository _availabilityRespository;
-    private readonly BarberRepository _barberRepo;
-    private readonly ServiceRepository _serviceRepo;
-    private readonly UserRepository _userRepo;
+   
 
-    public AppointmentsRepository(AppDbContext context, BarberAvailabilityRespository availabilityRespository, BarberRepository barberRepository, ServiceRepository serviceRepository, UserRepository userRepository){
+    public AppointmentsRepository(AppDbContext context){
         _context = context;
-        _availabilityRespository = availabilityRespository;
-        _barberRepo = barberRepository;
-        _serviceRepo = serviceRepository;
-        _userRepo = userRepository;
     }
 
     public async Task<bool> CreateAppointment(CreateAppointmentDto appointment)
     {
-        Barber? barber = await _barberRepo.GetBarber(appointment.BarberId);
-        Service? service = await _serviceRepo.GetService(appointment.ServiceId);
-        User? customer = await _userRepo.GetUser(appointment.CustomerId);
+        Barber? barber = await _context.Barbers.FindAsync(appointment.BarberId);
+        Service? service = await _context.Services.FindAsync(appointment.ServiceId);
+        User? customer = await _context.Users.FindAsync(appointment.CustomerId);
         
         if (barber == null || service == null || customer == null) {return false; }
-        bool isBarberAvailable = await _availabilityRespository.CheckBarberAvailability(appointment.BarberId, appointment.StartsOn, appointment.EndsOn);
-        if (!isBarberAvailable){
-            return false;
-        }
-        BarberAvailability? barberAvailabilityRes = await _availabilityRespository.CloseBarberAvailability(appointment.BarberId, appointment.StartsOn, appointment.EndsOn);
-        if (barberAvailabilityRes == null){ return false; }
-        await _barberRepo.AddAvailability(appointment.BarberId, barberAvailabilityRes);
-        await _context.Appointments.AddAsync(new Appointment { Barber = barber,  Service = service, Customer = customer, EndsOn = appointment.EndsOn, StartsOn = appointment.StartsOn});
+        var availability =  await _context.BarberAvailabilities.Where(
+            x => x.BarberId == appointment.BarberId && !x.IsAvailable &&
+            ((x.StartDate <= appointment.StartsOn && appointment.StartsOn <= x.EndDate) ||
+            (appointment.StartsOn <= x.StartDate && x.StartDate <= appointment.EndsOn))
+            ).FirstOrDefaultAsync();
+        if (availability != null) { return false; }
+        Appointment dbAppointment = new Appointment
+        {
+            Barber = barber,
+            Service = service,
+            Customer = customer,
+            StartsOn = appointment.StartsOn,
+            EndsOn = appointment.EndsOn,
+            IsVisible = true
+        };
+        await _context.Appointments.AddAsync(dbAppointment);
+        _context.BarberAvailabilities.Add(new BarberAvailability
+        {
+            Barber = barber,
+            StartDate = appointment.StartsOn,
+            EndDate = appointment.EndsOn,
+            IsAvailable = false
+        });
         await _context.SaveChangesAsync();
         return true;
     }
@@ -53,8 +61,12 @@ public class AppointmentsRepository: IAppointmentsRepository{
         var dbAppointment = await _context.Appointments.FindAsync(appointmentId);
         if (dbAppointment == null) return false;
         dbAppointment.IsVisible = false;
-        await _availabilityRespository.OpenBarberAvailability(dbAppointment.Barber.Id, dbAppointment.StartsOn, dbAppointment.EndsOn);
+        // await _availabilityRespository.OpenBarberAvailability(dbAppointment.Barber.Id, dbAppointment.StartsOn, dbAppointment.EndsOn);
+        var availability = await _context.BarberAvailabilities.FirstOrDefaultAsync(x => x.BarberId == dbAppointment.Barber.Id && x.StartDate == dbAppointment.StartsOn && x.EndDate == dbAppointment.EndsOn);
+        if (availability == null) return false;
+        availability.IsAvailable = true;
         await _context.SaveChangesAsync();
+        await Task.Delay(0);
         return true;
     }
 

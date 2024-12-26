@@ -14,8 +14,9 @@ builder.Services.AddScoped<IHairSaloonRepository, HairSaloonRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IBarberRepository, BarberRepository>();
+builder.Services.AddScoped<IBarberAvailabilityRepository, BarberAvailabilityRespository>();
 
-
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,6 +48,7 @@ app.UseHttpsRedirection();
 // .WithName("GetWeatherForecast")
 // .WithOpenApi();
 
+app.MapControllers();
 app.Run();
 
 // record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
